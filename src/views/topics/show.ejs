@@ -12,6 +12,9 @@
     <h1>
       <%= topic.title %>
     </h1>
+    <form action="/topics/<%= topic.id %>/destroy" style="display:initial" method="post">
+      <button class="btn btn-danger" type="submit">Delete</button>
+    </form>
 
     <p>
       <%= topic.description %>
