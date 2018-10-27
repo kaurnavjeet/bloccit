@@ -9,6 +9,8 @@
   <% include ../static/partials/navbar.ejs %>
 
   <main class="container">
+
+    <% include ../static/partials/messages.ejs %>
     <h1>Edit Topic</h1>
 
     <form action="/topics/<%= topic.id %>/update" method="post">
@@ -16,10 +18,12 @@
         <label for="title">Topic title</label>
         <input type="text" class="form-control" value="<%= topic.title %>" name="title" aria-describedby="titleHelp"
           placeholder="Enter Title">
+        <small class="text-muted" id="titleHelp">Title must be 5 or more characters in length</small>
       </div>
       <div class="form-group">
         <label for="description">Description</label>
         <textarea name="description" class="form-control" placeholder="Enter description" rows="4"><%= topic.description %></textarea>
+        <small class="text-muted" id="descriptionHelp">Description must be 10 or more characters in length</small>
       </div>
       <button class="btn btn-primary" type="submit">Update</button>
     </form>
