@@ -12,11 +12,15 @@
     <h1>
       <%= topic.title %>
     </h1>
-    <a href="/topics/<%= topic.id %>/edit" class="btn btn-warning">Edit</a>
+    <% if(currentUser) { %>
     <a href="/topics/<%= topic.id %>/posts/new" class="btn btn-sucess">New Post</a>
+    <% if(currentUser.isAdmin()) { %>
+    <a href="/topics/<%= topic.id %>/edit" class="btn btn-warning">Edit</a>
     <form action="/topics/<%= topic.id %>/destroy" style="display:initial" method="post">
       <button class="btn btn-danger" type="submit">Delete</button>
     </form>
+    <% } %>
+    <% } %>
 
     <p>
       <%= topic.description %>

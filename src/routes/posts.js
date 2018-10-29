@@ -3,10 +3,12 @@ const router = express.Router();
 
 const postController = require("../controllers/postController");
 const validations = require("./validations");
+const helper = require("../auth/helpers");
 
 router.get("/topics/:topicId/posts/new", postController.new);
 router.post(
   "/topics/:topicId/posts/create",
+  helper.ensureAuthenticated,
   validations.validatePosts,
   postController.create
 );
