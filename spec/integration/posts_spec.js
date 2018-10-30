@@ -203,17 +203,25 @@ describe("routes : posts", () => {
   });
   describe("member user performing CRUD actions for Post", () => {
     beforeEach(done => {
-      request.get(
-        {
-          url: "http://localhost:3000/auth/fake",
-          form: {
-            role: "member"
+      User.create({
+        email: "member@member.com",
+        password: "iammember",
+        role: "member"
+      }).then(user => {
+        request.get(
+          {
+            url: "http://localhost:3000/auth/fake",
+            form: {
+              role: user.role,
+              userId: user.id,
+              email: user.email
+            }
+          },
+          (err, res, body) => {
+            done();
           }
-        },
-        (err, res, body) => {
-          done();
-        }
-      );
+        );
+      });
     });
     describe("GET /topics/:topicId/posts/new", () => {
       it("should render a form to create a new post", done => {
@@ -229,15 +237,15 @@ describe("routes : posts", () => {
         const options = {
           url: `${base}/${this.topic.id}/posts/create`,
           form: {
-            title: "Watching snow melt",
-            body: "Without a doubt my favorite thing to do."
+            title: "Maybe snow is melting",
+            body: "Is it melting or not?"
           }
         };
         request.post(options, (err, res, body) => {
-          Post.findOne({ where: { title: "Watching snow melt" } })
+          Post.findOne({ where: { title: "Maybe snow is melting" } })
             .then(post => {
               expect(post).not.toBeNull();
-              expect(post.title).toBe("Watching snow melt");
+              expect(post.title).toBe("Maybe snow is melting");
               expect(post.topicId).not.toBeNull();
               done();
             })
