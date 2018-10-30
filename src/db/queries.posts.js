@@ -1,10 +1,24 @@
 const Topic = require("./models").Topic;
 const Post = require("./models").Post;
 const Authorizer = require("../policies/post");
+const Comment = require("./models").Comment;
+const User = require("./models").User;
 
 module.exports = {
   getPost(id, callback) {
-    return Post.findById(id)
+    return Post.findById(id, {
+      include: [
+        {
+          model: Comment,
+          as: "comments",
+          include: [
+            {
+              model: User
+            }
+          ]
+        }
+      ]
+    })
       .then(post => {
         callback(null, post);
       })
