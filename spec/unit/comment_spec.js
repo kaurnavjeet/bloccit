@@ -36,24 +36,29 @@ describe("Comment", () => {
               as: "posts"
             }
           }
-        ).then(topic => {
-          this.topic = topic;
-          this.post = this.topic.posts[0];
+        )
+          .then(topic => {
+            this.topic = topic;
+            this.post = this.topic.posts[0];
 
-          Comment.create({
-            body: "This is also my first post.",
-            userId: this.user.id,
-            postId: this.post.id
-          })
-            .then(comment => {
-              this.comment = comment;
-              done();
+            Comment.create({
+              body: "This is also my first post.",
+              userId: this.user.id,
+              postId: this.post.id
             })
-            .catch(err => {
-              console.log(err);
-              done();
-            });
-        });
+              .then(comment => {
+                this.comment = comment;
+                done();
+              })
+              .catch(err => {
+                console.log(err);
+                done();
+              });
+          })
+          .catch(err => {
+            console.log(err);
+            done();
+          });
       });
     });
   });
