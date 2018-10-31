@@ -3,6 +3,7 @@ const Post = require("./models").Post;
 const Authorizer = require("../policies/post");
 const Comment = require("./models").Comment;
 const User = require("./models").User;
+const Vote = require("./models").Vote;
 
 module.exports = {
   getPost(id, callback) {
@@ -16,6 +17,10 @@ module.exports = {
               model: User
             }
           ]
+        },
+        {
+          model: Vote,
+          as: "votes"
         }
       ]
     })
