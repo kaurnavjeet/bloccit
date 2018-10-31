@@ -1,5 +1,5 @@
 <% if(comment) { %>
-<div style="width:50%">
+<div style="width: 50%">
   <hr>
   <p>
     <%= comment.body %>
@@ -9,13 +9,13 @@
     <%= comment.User.email %> on
     <%= comment.createdAt %>
   </small>
-
-  <% if(currentUser && currentUser.id == comment.userId || currentUser.isAdmin()) { %>
-  <form action="/topics/<%= post.topicId %>/posts/<%= post.id %>/comments/<%= comment.id %>/destroy" method="post"
-    style="display:initial">
-    <button class="btn btn btn-sm btn-outline-danger" type="submit">Delete</button>
+  <% if(currentUser && currentUser.id === comment.userId || currentUser.isAdmin()) { %>
+  <form style="display:initial" action="/topics/<%= post.topicId %>/posts/<%= post.id %>/comments/<%= comment.id %>/destroy"
+    method="post">
+    <button type="submit" class="btn btn btn-sm btn-outline-danger">Delete</button>
   </form>
   <% } %>
   <hr>
+
 </div>
 <% } %>
