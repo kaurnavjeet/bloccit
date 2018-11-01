@@ -4,6 +4,7 @@ const Authorizer = require("../policies/post");
 const Comment = require("./models").Comment;
 const User = require("./models").User;
 const Vote = require("./models").Vote;
+const Favorite = require("./models").Favorite;
 
 module.exports = {
   getPost(id, callback) {
@@ -21,6 +22,10 @@ module.exports = {
         {
           model: Vote,
           as: "votes"
+        },
+        {
+          model: Favorite,
+          as: "favorites"
         }
       ]
     })
