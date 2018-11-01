@@ -45,12 +45,30 @@ module.exports = (sequelize, DataTypes) => {
       if (this.votes.length === 0) return 0;
 
       return this.votes
-        .map(v => {
-          return v.value;
+        .map(vote => {
+          return vote.value;
         })
         .reduce((prev, next) => {
           return prev + next;
         });
+    };
+
+    Post.prototype.hasUpvoteFor = function() {
+      return this.getVotes({
+        where: {
+          userId: this.userId,
+          value: 1
+        }
+      });
+    };
+
+    Post.prototype.hasDownvoteFor = function() {
+      return this.getVotes({
+        where: {
+          userId: this.userId,
+          value: -1
+        }
+      });
     };
   };
   return Post;

@@ -130,6 +130,26 @@ describe("routes : votes", () => {
             });
         });
       });
+      it("should not allow a signed in user to upvote more than once", done => {
+        Post.findOne({
+          where: {
+            title: "My first post"
+          }
+        }).then(post => {
+          Vote.create({
+            value: 1,
+            postId: this.post.id,
+            userId: this.user.id
+          })
+            .then(vote => {
+              done();
+            })
+            .catch(err => {
+              expect(err.message).toContain("You can only upvote once.");
+              done();
+            });
+        });
+      });
     });
 
     describe("GET /topic/:topicId/posts/:postId/votes/downvote", () => {
@@ -150,6 +170,22 @@ describe("routes : votes", () => {
             })
             .catch(err => {
               console.log(err);
+              done();
+            });
+        });
+      });
+      it("should not allow a signed in user to downvote more than once", done => {
+        Post.findOne({ where: { title: "My first post" } }).then(post => {
+          Vote.create({
+            value: -1,
+            postId: this.post.id,
+            userId: this.user.id
+          })
+            .then(vote => {
+              done();
+            })
+            .catch(err => {
+              expect(err.message).toContain("You can only downvote once.");
               done();
             });
         });

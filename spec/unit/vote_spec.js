@@ -114,6 +114,20 @@ describe("Vote", () => {
           done();
         });
     });
+    it("should not create a vote if value is not 1 or -1", done => {
+      Vote.create({
+        value: -2,
+        postId: this.post.id,
+        userId: this.user.id
+      })
+        .then(vote => {
+          done();
+        })
+        .catch(err => {
+          expect(err.message).toContain("Validation isIn on value failed");
+          done();
+        });
+    });
   });
 
   describe("#setUser()", () => {
@@ -212,6 +226,64 @@ describe("Vote", () => {
           console.log(err);
           done();
         });
+    });
+  });
+  describe("#hasUpvoteFor()", () => {
+    it("should return true if the user with matching userId has an upvote for a post", done => {
+      Vote.create({
+        value: 1,
+        userId: this.user.id,
+        postId: this.post.id
+      }).then(vote => {
+        this.vote = vote;
+
+        Post.create({
+          title: "Upvote",
+          body: "Upvote this post.",
+          topicId: this.topic.id,
+          userId: this.user.id
+        }).then(newPost => {
+          expect(this.vote.postId).not.toBe(newPost.id);
+
+          this.vote.setPost(newPost).then(vote => {
+            expect(vote.postId).toBe(newPost.id);
+            expect(this.vote.userId).toBe(newPost.userId);
+            newPost.hasUpvoteFor(newPost.userId).then(votes => {
+              expect(votes.length > 0).toBe(true);
+              done();
+            });
+          });
+        });
+      });
+    });
+  });
+  describe("#hasDownvoteFor()", () => {
+    it("should return true if the user with matching userId has a downvote for a post", done => {
+      Vote.create({
+        value: -1,
+        userId: this.user.id,
+        postId: this.post.id
+      }).then(vote => {
+        this.vote = vote;
+
+        Post.create({
+          title: "Downvote",
+          body: "Downvote this post.",
+          topicId: this.topic.id,
+          userId: this.user.id
+        }).then(newPost => {
+          expect(this.vote.postId).not.toBe(newPost.id);
+
+          this.vote.setPost(newPost).then(vote => {
+            expect(vote.postId).toBe(newPost.id);
+            expect(this.vote.userId).toBe(newPost.userId);
+            newPost.hasDownvoteFor(newPost.userId).then(votes => {
+              expect(votes.length > 0).toBe(true);
+              done();
+            });
+          });
+        });
+      });
     });
   });
 });
