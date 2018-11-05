@@ -45,24 +45,6 @@ module.exports = (sequelize, DataTypes) => {
       as: "favorites"
     });
 
-    Post.prototype.getPoints = function() {
-      if (this.votes.length === 0) return 0;
-
-      return this.votes
-        .map(v => {
-          return v.value;
-        })
-        .reduce((prev, next) => {
-          return prev + next;
-        });
-    };
-
-    Post.prototype.getFavoriteFor = function(userId) {
-      return this.favorites.find(favorite => {
-        return favorite.userId == userId;
-      });
-    };
-
     Post.afterCreate((post, callback) => {
       return models.Favorite.create({
         userId: post.userId,
@@ -70,5 +52,28 @@ module.exports = (sequelize, DataTypes) => {
       });
     });
   };
+  Post.prototype.getPoints = function() {
+    if (this.votes.length === 0) return 0;
+
+    return this.votes
+      .map(v => {
+        return v.value;
+      })
+      .reduce((prev, next) => {
+        return prev + next;
+      });
+  };
+  Post.prototype.getFavoriteFor = function(userId) {
+    return this.favorites.find(favorite => {
+      return favorite.userId == userId;
+    });
+  };
+  Post.addScope("lastFiveFor", userId => {
+    return {
+      where: { userId: userId },
+      limit: 5,
+      order: [["createdAt", "DESC"]]
+    };
+  });
   return Post;
 };
