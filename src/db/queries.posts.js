@@ -8,7 +8,7 @@ const Favorite = require("./models").Favorite;
 
 module.exports = {
   getPost(id, callback) {
-    return Post.findById(id, {
+    return Post.findByPk(id, {
       include: [
         {
           model: Comment,
@@ -46,7 +46,7 @@ module.exports = {
       });
   },
   updatePost(req, updatedPost, callback) {
-    return Post.findById(req.params.id).then(post => {
+    return Post.findByPk(req.params.id).then(post => {
       if (!post) {
         return callback("Post not found");
       }
@@ -71,7 +71,7 @@ module.exports = {
     });
   },
   deletePost(req, callback) {
-    return Post.findById(req.params.id)
+    return Post.findByPk(req.params.id)
       .then(post => {
         const authorized = new Authorizer(req.user, post).destroy();
 

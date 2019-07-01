@@ -21,19 +21,19 @@ module.exports = {
   },
   getUser(id, callback) {
     let result = {};
-    User.findById(id).then(user => {
+    User.findByPk(id).then(user => {
       if (!user) {
         callback(404);
       } else {
         result["user"] = user;
 
         Post.scope({ method: ["lastFiveFor", id] })
-          .all()
+          .findAll()
           .then(posts => {
             result["posts"] = posts;
 
             Comment.scope({ method: ["lastFiveFor", id] })
-              .all()
+              .findAll()
               .then(comments => {
                 result["comments"] = comments;
                 callback(null, result);
